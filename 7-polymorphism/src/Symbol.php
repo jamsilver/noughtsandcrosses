@@ -9,7 +9,7 @@ enum Symbol: string
     {
         return match($this) {
             Symbol::X => Symbol::O,
-            default => Symbol::X,
+            Symbol::O => Symbol::X,
         };
     }
 }

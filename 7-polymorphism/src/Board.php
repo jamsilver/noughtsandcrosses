@@ -4,11 +4,17 @@ class Board implements Stringable
 {
     private array $symbolsWritten = [];
 
-    private const SIZE = 3;
+    public const SIZE = 3;
 
     public function writeCell(Coordinate $coordinate, Symbol $symbol): self
     {
         $this->symbolsWritten[$coordinate->getX()][$coordinate->getY()] = $symbol;
+        return $this;
+    }
+
+    public function clearCell(Coordinate $coordinate): self
+    {
+        unset($this->symbolsWritten[$coordinate->getX()][$coordinate->getY()]);
         return $this;
     }
 

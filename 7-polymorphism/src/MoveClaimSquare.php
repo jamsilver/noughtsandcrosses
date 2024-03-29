@@ -1,10 +1,10 @@
 <?php
 
-class MoveWriteSymbol extends Move
+class MoveClaimSquare extends Move
 {
     public function __construct(
         private readonly Coordinate $coordinate,
-        private readonly Symbol $symbol,
+        private readonly Symbol $playerSymbol,
     ) {}
 
     public function getCoordinate(): Coordinate
@@ -12,14 +12,14 @@ class MoveWriteSymbol extends Move
         return $this->coordinate;
     }
 
-    public function getSymbol(): Symbol
+    public function getPlayerSymbol(): Symbol
     {
-        return $this->symbol;
+        return $this->playerSymbol;
     }
 
     public function applyToBoard(Board $board): void
     {
-        $board->writeCell($this->coordinate, $this->symbol);
+        $board->writeCell($this->coordinate, $this->playerSymbol);
     }
 
     public function validateForBoard(Board $board): void

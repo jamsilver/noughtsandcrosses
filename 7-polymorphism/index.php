@@ -3,8 +3,9 @@
 include 'src/Board.php';
 include 'src/Coordinate.php';
 include 'src/Move.php';
+include 'src/MoveBomb.php';
+include 'src/MoveClaimSquare.php';
 include 'src/MoveList.php';
-include 'src/MoveWriteSymbol.php';
 include 'src/Symbol.php';
 
 $board = new Board();

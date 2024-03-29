@@ -2,7 +2,7 @@
 
 abstract class Move
 {
-    public static function createFromNotation(string $value, Symbol $symbol): Move
+    public static function createFromNotation(string $value, Symbol $playerSymbol): Move
     {
         $value = trim(strtoupper($value));
 
@@ -10,9 +10,16 @@ abstract class Move
             throw new UnexpectedValueException('Invalid move notation.');
         }
 
-        return new MoveWriteSymbol(
+        if ($value[0] === '💥') {
+            return new MoveBomb(
+                Coordinate::createFromNotation(substr($value, 1)),
+                $playerSymbol,
+            );
+        }
+
+        return new MoveClaimSquare(
             Coordinate::createFromNotation($value),
-            $symbol,
+            $playerSymbol,
         );
     }
 
