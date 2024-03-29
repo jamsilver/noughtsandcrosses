@@ -6,6 +6,7 @@ include 'src/Move.php';
 include 'src/MoveBomb.php';
 include 'src/MoveClaimSquare.php';
 include 'src/MoveList.php';
+include 'src/MoveTableFlip.php';
 include 'src/PlayerSymbol.php';
 
 $board = new Board();
@@ -68,6 +69,7 @@ print <<<HTML
         <p>Moves:</p>
         <ul>
             <li>💥: Play bomb (single use)</li>
+            <li>(╯°□°）╯︵ ┻━┻: Flip the board (single use)</li>
         </ul>
     </body>
 </html>

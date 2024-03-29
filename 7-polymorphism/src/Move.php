@@ -17,6 +17,10 @@ abstract class Move
             );
         }
 
+        if ($value === '(╯°□°）╯︵ ┻━┻') {
+            return new MoveTableFlip($playerSymbol);
+        }
+
         return new MoveClaimSquare(
             Coordinate::createFromNotation($value),
             $playerSymbol,
