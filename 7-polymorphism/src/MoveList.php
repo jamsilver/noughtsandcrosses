@@ -22,6 +22,13 @@ class MoveList implements IteratorAggregate
         return $lastMove === false ? null : $lastMove;
     }
 
+    public function removeLastMove(): self
+    {
+        end($this->moves);
+        unset($this->moves[key($this->moves)]);
+        return $this;
+    }
+
     public function push(Move $move): self
     {
         $this->moves[] = $move;

@@ -4,7 +4,7 @@ class Board implements Stringable
 {
     private array $symbolsWritten = [];
 
-    public const SIZE = 3;
+    public const SIZE = 5;
 
     public function writeCell(Coordinate $coordinate, PlayerSymbol $symbol): self
     {

@@ -23,6 +23,8 @@ abstract class Move
         );
     }
 
+    abstract function getPlayerSymbol(): PlayerSymbol;
+
     abstract function applyToBoard(Board $board): void;
 
     abstract function validateForBoard(Board $board): void;

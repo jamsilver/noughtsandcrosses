@@ -14,6 +14,10 @@ $moveList = !empty($_GET['reset']) ?
     (new MoveList())->store() :
     MoveList::createFromStorage();
 
+if (!empty($_GET['undo'])) {
+    $moveList->removeLastMove()->store();
+}
+
 $moveList->applyToBoard($board);
 
 $lastSymbol = $moveList->getLastMove()?->getPlayerSymbol();
@@ -56,6 +60,9 @@ print <<<HTML
             <label for="input">{$nextSymbol->value}'s move:</label>
             <input id="input" type="text" name="move">
             <input type="submit" value="Go" />
+            <br />
+            <br />
+            <input type="submit" value="Undo" name="undo" />
             <input type="submit" value="Reset" name="reset" />
         </form>
         <p>Moves:</p>
