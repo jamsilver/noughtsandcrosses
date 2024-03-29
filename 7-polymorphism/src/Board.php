@@ -6,34 +6,26 @@ class Board implements Stringable
 
     private const SIZE = 3;
 
-    public function applyMoveList(MoveList $moveList): self
+    public function writeCell(Coordinate $coordinate, Symbol $symbol): self
     {
-        foreach ($moveList as $move) {
-            $this->applyMove($move);
-        }
+        $this->symbolsWritten[$coordinate->getX()][$coordinate->getY()] = $symbol;
         return $this;
     }
 
-    public function applyMove(Move $move): self
+    public function getCell(Coordinate $coordinate): ?Symbol
     {
-        $coordinate = $move->getCoordinate();
-        $this->symbolsWritten[$coordinate->getX()][$coordinate->getY()] = $move->getSymbol();
-        return $this;
+        return $this->symbolsWritten[$coordinate->getX()][$coordinate->getY()];
     }
 
-    public function validateCoordinateIsAvailable(Coordinate $coordinate): void
+    public function coordinateIsValid(Coordinate $coordinate): void
     {
         if ($coordinate->getX() < 0 || Board::SIZE <= $coordinate->getX() ||
             $coordinate->getY() < 0 || Board::SIZE <= $coordinate->getY()) {
             throw new UnexpectedValueException( "Invalid input, coordinates outside board range.");
         }
-
-        if (isset($this->symbolsWritten[$coordinate->getX()][$coordinate->getY()])) {
-            throw new UnexpectedValueException( "Square is already filled, pick a blank square.");
-        }
     }
 
-    public function hasThreeInARow(): bool
+    public function hasWinner(): bool
     {
         $diagonal1Line = [];
         $diagonal2Line = [];
@@ -80,7 +72,7 @@ class Board implements Stringable
         for ($y = 0; $y < Board::SIZE; $y++) {
             $cells = [];
             for ($x = 0; $x < Board::SIZE; $x++) {
-                $cells[] = $this->getCell($x, $y);
+                $cells[] = $this->getCell(new Coordinate($x, $y))?->value ?? ' ';
             }
             $rows[] = str_pad($y + 1, $numberPrefixWidth) . $gutter . ' ' . implode(' | ', $cells);
         }
@@ -102,14 +94,5 @@ class Board implements Stringable
         $output[] = '';
 
         return implode("\n", $output);
-    }
-
-    private function getCell(int $x, int $y): string
-    {
-        if (!isset($this->symbolsWritten[$x][$y])) {
-            return ' ';
-        }
-
-        return $this->symbolsWritten[$x][$y]->value;
     }
 }

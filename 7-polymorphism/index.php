@@ -4,12 +4,13 @@ include 'src/Board.php';
 include 'src/Coordinate.php';
 include 'src/Move.php';
 include 'src/MoveList.php';
+include 'src/MoveWriteSymbol.php';
 include 'src/Symbol.php';
 
 $board = new Board();
 
 $moveList = MoveList::createFromStorage();
-$board->applyMoveList($moveList);
+$moveList->applyToBoard($board);
 
 $lastSymbol = $moveList->getLastMove()?->getSymbol();
 $currentSymbol = $lastSymbol?->flip() ?? Symbol::X;
@@ -20,15 +21,11 @@ $input = trim((string) ($_GET['move'] ?? ''));
 $errorMessage = '';
 if (!empty($input)) {
     try {
-        $userCoordinate = Coordinate::createFromNotation($input);
-        $board->validateCoordinateIsAvailable($userCoordinate);
-
-        $move = new Move($userCoordinate, $currentSymbol);
-        $moveList->push($move)->store();
-
-        $board->applyMove($move);
-
+        $move = Move::createFromNotation($input, $currentSymbol);
+        $move->validateForBoard($board);
+        $move->applyToBoard($board);
         $nextSymbol = $currentSymbol->flip();
+        $moveList->push($move)->store();
     }
     catch (UnexpectedValueException $e) {
         $errorMessage = 'ERROR: ' . $e->getMessage();
@@ -37,7 +34,7 @@ if (!empty($input)) {
 
 header('Content-Type: text/html; charset=UTF-8');
 
-$playMessage = $board->hasThreeInARow() ?
+$playMessage = $board->hasWinner() ?
     $currentSymbol->value . ' IS THE WINNER! GeeGees!' :
     '> ' . $nextSymbol->value . ' to play next.';
 

@@ -38,4 +38,12 @@ class MoveList implements IteratorAggregate
     {
         return new ArrayIterator($this->moves);
     }
+
+    public function applyToBoard(Board $board): self
+    {
+        foreach ($this->moves as $move) {
+            $move->applyToBoard($board);
+        }
+        return $this;
+    }
 }

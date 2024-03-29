@@ -1,19 +1,22 @@
 <?php
 
-class Move
+abstract class Move
 {
-    public function __construct(
-        private readonly Coordinate $coordinate,
-        private readonly Symbol $symbol,
-    ) {}
-
-    public function getCoordinate(): Coordinate
+    public static function createFromNotation(string $value, Symbol $symbol): Move
     {
-        return $this->coordinate;
+        $value = trim(strtoupper($value));
+
+        if (strlen($value) === 0) {
+            throw new UnexpectedValueException('Invalid move notation.');
+        }
+
+        return new MoveWriteSymbol(
+            Coordinate::createFromNotation($value),
+            $symbol,
+        );
     }
 
-    public function getSymbol(): Symbol
-    {
-        return $this->symbol;
-    }
+    abstract function applyToBoard(Board $board): void;
+
+    abstract function validateForBoard(Board $board): void;
 }
