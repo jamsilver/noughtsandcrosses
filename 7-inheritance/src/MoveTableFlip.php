@@ -15,14 +15,11 @@ class MoveTableFlip extends Move
 
     public function applyToBoard(Board $board): void
     {
-        for ($y = 0; $y < Board::SIZE; $y++) {
-            for ($x = 0; $x < Board::SIZE; $x++) {
-                $coordinate = new Coordinate($x, $y);
-                if ($board->getCell($coordinate) !== null) {
-                    $board->writeCell($coordinate, $board->getCell($coordinate)->flip());
-                }
+        $board->forEachCell(function($coordinate, $cell) use ($board) {
+            if ($cell !== null) {
+                $board->writeCell($coordinate, $cell->flip());
             }
-        }
+        });
         $this->countUsage();
     }
 

@@ -23,6 +23,31 @@ class Board implements Stringable
         return $this->symbolsWritten[$coordinate->getX()][$coordinate->getY()] ?? null;
     }
 
+    public function forEachCell(callable $callback): self
+    {
+        for ($y = 0; $y < Board::SIZE; $y++) {
+            for ($x = 0; $x < Board::SIZE; $x++) {
+                $coordinate = new Coordinate($x, $y);
+                $callback($coordinate, $this->getCell($coordinate));
+            }
+        }
+        return $this;
+    }
+
+    public function forEachCellAround(Coordinate $epicentre, int $radius, bool $includeEpiCentre, callable $callback): self
+    {
+        for ($x = max(0, $epicentre->getX() - $radius); $x <= min(Board::SIZE - 1, $epicentre->getX() + $radius); $x++) {
+            for ($y = max(0, $epicentre->getY() - $radius); $y <= min(Board::SIZE - 1, $epicentre->getY() + $radius); $y++) {
+                $coordinate = new Coordinate($x, $y);
+                if (!$includeEpiCentre && $coordinate == $epicentre) {
+                    continue;
+                }
+                $callback($coordinate, $this->getCell($coordinate));
+            }
+        }
+        return $this;
+    }
+
     public function coordinateIsValid(Coordinate $coordinate): void
     {
         if ($coordinate->getX() < 0 || Board::SIZE <= $coordinate->getX() ||
