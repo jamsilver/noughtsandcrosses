@@ -9,7 +9,10 @@ include 'src/Symbol.php';
 
 $board = new Board();
 
-$moveList = MoveList::createFromStorage();
+$moveList = !empty($_GET['reset']) ?
+    (new MoveList())->store() :
+    MoveList::createFromStorage();
+
 $moveList->applyToBoard($board);
 
 $lastSymbol = $moveList->getLastMove()?->getSymbol();
@@ -19,7 +22,7 @@ $nextSymbol = $currentSymbol;
 $input = trim((string) ($_GET['move'] ?? ''));
 
 $errorMessage = '';
-if (!empty($input)) {
+if (!empty(trim($input))) {
     try {
         $move = Move::createFromNotation($input, $currentSymbol);
         $move->validateForBoard($board);
@@ -52,6 +55,7 @@ print <<<HTML
             <label for="input">{$nextSymbol->value}'s move:</label>
             <input id="input" type="text" name="move">
             <input type="submit" value="Go" />
+            <input type="submit" value="Reset" name="reset" />
         </form>
     </body>
 </html>
