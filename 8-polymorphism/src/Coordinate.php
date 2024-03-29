@@ -1,38 +1,50 @@
 <?php
 
-class Coordinate
+abstract class Coordinate implements Stringable
 {
-    public function __construct(
-        private readonly int $x,
-        private readonly int $y
-    ) {}
+    protected array $points = [];
 
-    public static function createFromNotation(string $value): Coordinate
+    public function __construct(...$points)
     {
-        $value = trim($value);
+        $dimension = $this->getDimension();
 
-        $matches = null;
-        if (empty($value) || preg_match('/^([A-Z])([1-9][0-9]*)$/i', $value, $matches) !== 1) {
-            throw new UnexpectedValueException('Invalid Coordinate notation.');
+        foreach ($points as $point) {
+            if (!is_int($point)) {
+                throw new UnexpectedValueException('Points must be integers.');
+            }
         }
 
-        $x = $matches[1];
-        $y = $matches[2];
-
-        return new Coordinate(
-            ord($x) - ord('A'),
-            (int) $y - 1
-        );
+        $this->points = array_slice(array_pad($points, $dimension, 0), 0, $dimension);
     }
 
-    public function getX(): int
+    public static function createFromCoordinate(Coordinate $other): static
     {
-        return $this->x;
+        return new static(...$other->getPoints());
     }
 
-    public function getY(): int
+    public function getNthPoint(int $n): int
     {
-        return $this->y;
+        if ($n < 0 || $this->getDimension() <= $n) {
+            throw new UnexpectedValueException(sprintf(
+                'Cannot get %s point of a Coordinate of dimension %s',
+                $n,
+                $this->getDimension(),
+            ));
+        }
+        return $this->points[$n];
     }
 
+    public function getPoints(): array
+    {
+        return $this->points;
+    }
+
+    abstract public function getDimension(): int;
+
+    abstract public static function createFromNotation(string $value): static;
+
+    public function __toString(): string
+    {
+        return '[' . implode(',', $this->points) . ']';
+    }
 }

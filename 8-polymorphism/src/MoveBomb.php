@@ -25,7 +25,7 @@ class MoveBomb extends Move
         $board->writeCell($this->coordinate, $this->playerSymbol);
 
         // Delete surrounding cells.
-        $board->forEachCellAround($this->coordinate, 1, false, function($coordinate, $cell) use ($board) {
+        $board->forEachCellAround($this->coordinate, 1, false, function(Coordinate $coordinate, $cell) use ($board) {
             $board->clearCell($coordinate);
         });
 

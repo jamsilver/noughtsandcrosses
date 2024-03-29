@@ -2,7 +2,7 @@
 
 abstract class Move
 {
-    public static function createFromNotation(string $value, PlayerSymbol $playerSymbol): Move
+    public static function createFromNotation(string $value, PlayerSymbol $playerSymbol, Board $board): Move
     {
         $value = trim(strtoupper($value));
 
@@ -12,14 +12,14 @@ abstract class Move
 
         if (mb_substr($value, 0, 1) === '💥') {
             return new MoveBomb(
-                Coordinate::createFromNotation(mb_substr($value, 1)),
+                $board->newCoordinateFromNotation(mb_substr($value, 1)),
                 $playerSymbol,
             );
         }
 
         if (mb_substr($value, 0, 1) === '💣') {
             return new MoveSmartBomb(
-                Coordinate::createFromNotation(mb_substr($value, 1)),
+                $board->newCoordinateFromNotation(mb_substr($value, 1)),
                 $playerSymbol,
             );
         }
@@ -29,7 +29,7 @@ abstract class Move
         }
 
         return new MoveClaimSquare(
-            Coordinate::createFromNotation($value),
+            $board->newCoordinateFromNotation($value),
             $playerSymbol,
         );
     }

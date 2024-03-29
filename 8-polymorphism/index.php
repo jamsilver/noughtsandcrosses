@@ -1,7 +1,12 @@
 <?php
 
 include 'src/Board.php';
+include 'src/Board1D.php';
+include 'src/Board2D.php';
 include 'src/Coordinate.php';
+include 'src/Coordinate1D.php';
+include 'src/Coordinate2D.php';
+include 'src/Coordinate3D.php';
 include 'src/Move.php';
 include 'src/MoveBomb.php';
 include 'src/MoveClaimSquare.php';
@@ -10,7 +15,7 @@ include 'src/MoveSmartBomb.php';
 include 'src/MoveTableFlip.php';
 include 'src/PlayerSymbol.php';
 
-$board = new Board();
+$board = new Board2D();
 
 $moveList = !empty($_GET['reset']) ?
     (new MoveList())->store() :
@@ -31,7 +36,7 @@ $input = trim((string) ($_GET['move'] ?? ''));
 $errorMessage = '';
 if (!empty(trim($input))) {
     try {
-        $move = Move::createFromNotation($input, $currentSymbol);
+        $move = Move::createFromNotation($input, $currentSymbol, $board);
         $move->validateForBoard($board);
         $move->applyToBoard($board);
         $nextSymbol = $currentSymbol->flip();

@@ -1,129 +1,69 @@
 <?php
 
-class Board implements Stringable
+abstract class Board implements Stringable
 {
-    private array $symbolsWritten = [];
+    protected array $symbolsWritten = [];
 
     public const SIZE = 5;
 
     public function writeCell(Coordinate $coordinate, PlayerSymbol $symbol): self
     {
-        $this->symbolsWritten[$coordinate->getX()][$coordinate->getY()] = $symbol;
+        $this->symbolsWritten[(string) $coordinate] = [ $coordinate, $symbol ];
         return $this;
     }
 
     public function clearCell(Coordinate $coordinate): self
     {
-        unset($this->symbolsWritten[$coordinate->getX()][$coordinate->getY()]);
+        unset($this->symbolsWritten[(string) $coordinate]);
         return $this;
     }
 
     public function getCell(Coordinate $coordinate): ?PlayerSymbol
     {
-        return $this->symbolsWritten[$coordinate->getX()][$coordinate->getY()] ?? null;
+        return $this->symbolsWritten[(string) $coordinate][1] ?? null;
     }
 
-    public function forEachCell(callable $callback): self
+    public function hasCell(Coordinate $coordinate): bool
     {
-        for ($y = 0; $y < Board::SIZE; $y++) {
-            for ($x = 0; $x < Board::SIZE; $x++) {
-                $coordinate = new Coordinate($x, $y);
-                $callback($coordinate, $this->getCell($coordinate));
-            }
-        }
-        return $this;
-    }
-
-    public function forEachCellAround(Coordinate $epicentre, int $radius, bool $includeEpiCentre, callable $callback): self
-    {
-        for ($x = max(0, $epicentre->getX() - $radius); $x <= min(Board::SIZE - 1, $epicentre->getX() + $radius); $x++) {
-            for ($y = max(0, $epicentre->getY() - $radius); $y <= min(Board::SIZE - 1, $epicentre->getY() + $radius); $y++) {
-                $coordinate = new Coordinate($x, $y);
-                if (!$includeEpiCentre && $coordinate == $epicentre) {
-                    continue;
-                }
-                $callback($coordinate, $this->getCell($coordinate));
-            }
-        }
-        return $this;
+        return isset($this->symbolsWritten[(string) $coordinate]);
     }
 
     public function coordinateIsValid(Coordinate $coordinate): void
     {
-        if ($coordinate->getX() < 0 || Board::SIZE <= $coordinate->getX() ||
-            $coordinate->getY() < 0 || Board::SIZE <= $coordinate->getY()) {
-            throw new UnexpectedValueException( "Invalid input, coordinates outside board range.");
+        for ($i = 0; $i < $coordinate->getDimension(); $i++) {
+            $point = $coordinate->getNthPoint($i);
+            if ($point < 0 || static::SIZE <= $point) {
+                throw new UnexpectedValueException( "Invalid input, coordinates outside board range.");
+            }
         }
     }
 
-    public function hasWinner(): bool
+    abstract public function hasWinner(): bool;
+
+    protected function gatherLineOfCells(int $coordinatePointIndex, int $coordinatePointValue): array
     {
-        $diagonal1Line = [];
-        $diagonal2Line = [];
-
-        for ($i = 0; $i < Board::SIZE; $i++) {
-            // Check row i.
-            if ($this->lineIsAWin($this->symbolsWritten[$i] ?? [])) {
-                return true;
-            }
-            // Check column i.
-            if ($this->lineIsAWin(array_column($this->symbolsWritten, $i))) {
-                return true;
-            }
-            // Use this loop to build up line variables for diagonal 1 and diagonal 2.
-            $diagonal1Line[] = $this->symbolsWritten[$i][$i] ?? null;
-            $diagonal2Line[] = $this->symbolsWritten[$i][Board::SIZE - 1 - $i] ?? null;
-        }
-
-        // Check the two diagonals.
-        if ($this->lineIsAWin(array_filter($diagonal1Line))) {
-            return true;
-        }
-        if ($this->lineIsAWin(array_filter($diagonal2Line))) {
-            return true;
-        }
-
-        return false;
+        return array_map(
+            fn ($v) => $v[1],
+            array_filter(
+                $this->symbolsWritten,
+                fn($v) => $v[0]->getNthPoint($coordinatePointIndex) === $coordinatePointValue,
+            ),
+        );
     }
 
-    private function lineIsAWin(array $line): bool
+    protected function lineIsAWin(array $line): bool
     {
         $lineOfStr = array_map(fn(PlayerSymbol $s) => $s->value, $line);
-        return count($lineOfStr) === Board::SIZE && count(array_unique($lineOfStr)) === 1;
+        return count($lineOfStr) === static::SIZE && count(array_unique($lineOfStr)) === 1;
     }
 
-    public function __toString(): string
-    {
-        $output = [];
+    abstract public function newCoordinate(...$points): Coordinate;
 
-        $numberPrefixWidth = strlen((string) Board::SIZE);
-        $gutter = '   ';
+    abstract public function newCoordinateFromNotation(string $value): Coordinate;
 
-        $rows = [];
-        for ($y = 0; $y < Board::SIZE; $y++) {
-            $cells = [];
-            for ($x = 0; $x < Board::SIZE; $x++) {
-                $cells[] = $this->getCell(new Coordinate($x, $y))?->value ?? ' ';
-            }
-            $rows[] = str_pad($y + 1, $numberPrefixWidth) . $gutter . ' ' . implode(' | ', $cells);
-        }
+    abstract public function forEachCell(callable $callback): self;
 
-        $rowSeparator = str_repeat('---', Board::SIZE) . str_repeat('-', Board::SIZE - 1);
+    abstract public function forEachCellAround(Coordinate $epicentre, int $radius, bool $includeEpiCentre, callable $callback): self;
 
-        $output[] = implode(
-            "\n" . str_repeat(' ', $numberPrefixWidth) . $gutter . $rowSeparator . "\n",
-            $rows,
-        );
-
-        $columnLetters = array_map(
-            fn($i) => chr(ord('A') + $i),
-            range(0, Board::SIZE - 1)
-        );
-
-        $output[] = '';
-        $output[] = str_pad(' ', $numberPrefixWidth) . $gutter . ' ' . implode('   ', $columnLetters);
-        $output[] = '';
-
-        return implode("\n", $output);
-    }
+    abstract public function __toString(): string;
 }
