@@ -5,8 +5,8 @@ class MoveBomb extends Move
     static array $playerUsages = [];
 
     public function __construct(
-        private readonly Coordinate $coordinate,
-        private readonly PlayerSymbol $playerSymbol,
+        protected readonly Coordinate $coordinate,
+        protected readonly PlayerSymbol $playerSymbol,
     ) {}
 
     public function getCoordinate(): Coordinate
@@ -46,17 +46,17 @@ class MoveBomb extends Move
         }
 
         if ($this->hasBeenUsed()) {
-            throw new UnexpectedValueException($this->playerSymbol->value . ' has already played their 💥!');
+            throw new UnexpectedValueException($this->playerSymbol->value . ' has already played their 💥/💣!');
         }
     }
 
-    private function countUsage(): void
+    protected function countUsage(): void
     {
         MoveBomb::$playerUsages += [ $this->playerSymbol->value => 0];
         MoveBomb::$playerUsages[$this->playerSymbol->value]++;
     }
 
-    private function hasBeenUsed(): bool
+    protected function hasBeenUsed(): bool
     {
         return (MoveBomb::$playerUsages[$this->playerSymbol->value] ?? 0) > 0;
     }

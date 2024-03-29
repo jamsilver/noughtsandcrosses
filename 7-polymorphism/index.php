@@ -6,6 +6,7 @@ include 'src/Move.php';
 include 'src/MoveBomb.php';
 include 'src/MoveClaimSquare.php';
 include 'src/MoveList.php';
+include 'src/MoveSmartBomb.php';
 include 'src/MoveTableFlip.php';
 include 'src/PlayerSymbol.php';
 
@@ -68,7 +69,8 @@ print <<<HTML
         </form>
         <p>Moves:</p>
         <ul>
-            <li>💥: Play bomb (single use)</li>
+            <li>💥: Play bomb (single use, only one of 💥 and 💣 may be played)</li>
+            <li>💣: Play smart bomb (single use, only one of 💥 and 💣 may be played)</li>
             <li>(╯°□°）╯︵ ┻━┻: Flip the board (single use)</li>
         </ul>
     </body>

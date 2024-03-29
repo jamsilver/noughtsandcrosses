@@ -17,6 +17,13 @@ abstract class Move
             );
         }
 
+        if (mb_substr($value, 0, 1) === '💣') {
+            return new MoveSmartBomb(
+                Coordinate::createFromNotation(mb_substr($value, 1)),
+                $playerSymbol,
+            );
+        }
+
         if ($value === '(╯°□°）╯︵ ┻━┻') {
             return new MoveTableFlip($playerSymbol);
         }
