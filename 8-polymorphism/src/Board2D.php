@@ -100,6 +100,6 @@ final class Board2D extends Board
         $output[] = str_pad(' ', $numberPrefixWidth) . $gutter . ' ' . implode('   ', $columnLetters);
         $output[] = '';
 
-        return implode("\n", $output);
+        return '<pre><code>' . implode("\n", $output) . '</code></pre>';
     }
 }

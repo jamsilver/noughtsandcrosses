@@ -29,7 +29,7 @@ class Coordinate3D extends Coordinate
 
     public function getX(): int
     {
-        return $this->points[1];
+        return $this->points[0];
     }
 
     public function getY(): int
@@ -40,5 +40,12 @@ class Coordinate3D extends Coordinate
     public function getZ(): int
     {
         return $this->points[2];
+    }
+
+    public function toNotation(): string
+    {
+        return chr($this->getX() + ord('A')) .
+            $this->getY() + 1 .
+            chr($this->getZ() + ord('a'));
     }
 }

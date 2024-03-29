@@ -3,6 +3,7 @@
 include 'src/Board.php';
 include 'src/Board1D.php';
 include 'src/Board2D.php';
+include 'src/Board3D.php';
 include 'src/Coordinate.php';
 include 'src/Coordinate1D.php';
 include 'src/Coordinate2D.php';
@@ -15,7 +16,7 @@ include 'src/MoveSmartBomb.php';
 include 'src/MoveTableFlip.php';
 include 'src/PlayerSymbol.php';
 
-$board = new Board2D();
+$board = new Board3D();
 
 $moveList = !empty($_GET['reset']) ?
     (new MoveList())->store() :
@@ -61,7 +62,7 @@ print <<<HTML
     <body>
         <h1>Noughts &amp; Crosses</h1>
         <p>$errorMessage</p>
-        <pre><code>$board</code></pre>
+        $board
         <p>$playMessage</p>
         <form method="get" action="/">
             <label for="input">{$nextSymbol->value}'s move:</label>
