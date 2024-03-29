@@ -69,6 +69,6 @@ class Board
     private function getCell(int $x, int $y): string
     {
         $cell = $this->board[$x][$y];
-        return $cell instanceof Symbol ? $cell->value : $cell;
+        return $cell instanceof PlayerSymbol ? $cell->value : $cell;
     }
 }

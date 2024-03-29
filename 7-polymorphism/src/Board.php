@@ -6,7 +6,7 @@ class Board implements Stringable
 
     public const SIZE = 3;
 
-    public function writeCell(Coordinate $coordinate, Symbol $symbol): self
+    public function writeCell(Coordinate $coordinate, PlayerSymbol $symbol): self
     {
         $this->symbolsWritten[$coordinate->getX()][$coordinate->getY()] = $symbol;
         return $this;
@@ -18,9 +18,9 @@ class Board implements Stringable
         return $this;
     }
 
-    public function getCell(Coordinate $coordinate): ?Symbol
+    public function getCell(Coordinate $coordinate): ?PlayerSymbol
     {
-        return $this->symbolsWritten[$coordinate->getX()][$coordinate->getY()];
+        return $this->symbolsWritten[$coordinate->getX()][$coordinate->getY()] ?? null;
     }
 
     public function coordinateIsValid(Coordinate $coordinate): void
@@ -63,7 +63,7 @@ class Board implements Stringable
 
     private function lineIsAWin(array $line): bool
     {
-        $lineOfStr = array_map(fn(Symbol $s) => $s->value, $line);
+        $lineOfStr = array_map(fn(PlayerSymbol $s) => $s->value, $line);
         return count($lineOfStr) === Board::SIZE && count(array_unique($lineOfStr)) === 1;
     }
 

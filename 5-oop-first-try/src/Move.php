@@ -4,7 +4,7 @@ class Move
 {
     public function __construct(
         private readonly Coordinate $coordinate,
-        private readonly Symbol $symbol,
+        private readonly PlayerSymbol $symbol,
     ) {}
 
     public function getCoordinate(): Coordinate
@@ -12,7 +12,7 @@ class Move
         return $this->coordinate;
     }
 
-    public function getSymbol(): Symbol
+    public function getSymbol(): PlayerSymbol
     {
         return $this->symbol;
     }

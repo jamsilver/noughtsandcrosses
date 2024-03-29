@@ -6,7 +6,7 @@ include 'src/Move.php';
 include 'src/MoveBomb.php';
 include 'src/MoveClaimSquare.php';
 include 'src/MoveList.php';
-include 'src/Symbol.php';
+include 'src/PlayerSymbol.php';
 
 $board = new Board();
 
@@ -16,8 +16,8 @@ $moveList = !empty($_GET['reset']) ?
 
 $moveList->applyToBoard($board);
 
-$lastSymbol = $moveList->getLastMove()?->getSymbol();
-$currentSymbol = $lastSymbol?->flip() ?? Symbol::X;
+$lastSymbol = $moveList->getLastMove()?->getPlayerSymbol();
+$currentSymbol = $lastSymbol?->flip() ?? PlayerSymbol::X;
 $nextSymbol = $currentSymbol;
 
 $input = trim((string) ($_GET['move'] ?? ''));
@@ -58,6 +58,10 @@ print <<<HTML
             <input type="submit" value="Go" />
             <input type="submit" value="Reset" name="reset" />
         </form>
+        <p>Moves:</p>
+        <ul>
+            <li>💥: Play bomb (single use)</li>
+        </ul>
     </body>
 </html>
 HTML;

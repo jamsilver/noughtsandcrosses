@@ -6,7 +6,7 @@ class MoveBomb extends Move
 
     public function __construct(
         private readonly Coordinate $coordinate,
-        private readonly Symbol $playerSymbol,
+        private readonly PlayerSymbol $playerSymbol,
     ) {}
 
     public function getCoordinate(): Coordinate
@@ -14,7 +14,7 @@ class MoveBomb extends Move
         return $this->coordinate;
     }
 
-    public function getPlayerSymbol(): Symbol
+    public function getPlayerSymbol(): PlayerSymbol
     {
         return $this->playerSymbol;
     }

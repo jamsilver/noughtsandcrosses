@@ -65,7 +65,7 @@ class Board
 
     private function lineIsAWin(array $line): bool
     {
-        $lineOfStr = array_map(fn(Symbol $s) => $s->value, $line);
+        $lineOfStr = array_map(fn(PlayerSymbol $s) => $s->value, $line);
         return count($lineOfStr) === Board::SIZE && count(array_unique($lineOfStr)) === 1;
     }
 

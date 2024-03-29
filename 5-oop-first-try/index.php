@@ -4,7 +4,7 @@ include 'src/Board.php';
 include 'src/Coordinate.php';
 include 'src/Move.php';
 include 'src/MoveList.php';
-include 'src/Symbol.php';
+include 'src/PlayerSymbol.php';
 
 $board = new Board();
 
@@ -12,7 +12,7 @@ $moveList = MoveList::createFromStorage();
 $board->applyMoveList($moveList);
 
 $lastSymbol = $moveList->getLastMove()?->getSymbol();
-$currentSymbol = $lastSymbol?->flip() ?? Symbol::X;
+$currentSymbol = $lastSymbol?->flip() ?? PlayerSymbol::X;
 $nextSymbol = $currentSymbol;
 
 $input = trim((string) ($_SERVER['QUERY_STRING'] ?? ''));
