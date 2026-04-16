@@ -16,7 +16,7 @@ include 'src/MoveSmartBomb.php';
 include 'src/MoveTableFlip.php';
 include 'src/PlayerSymbol.php';
 
-$board = new Board3D();
+$board = new Board2D();
 
 $moveList = !empty($_GET['reset']) ?
     (new MoveList())->store() :
