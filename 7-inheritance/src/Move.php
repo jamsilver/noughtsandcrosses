@@ -4,7 +4,7 @@ abstract class Move
 {
     public static function createFromNotation(string $value, PlayerSymbol $playerSymbol): Move
     {
-        $value = trim(strtoupper($value));
+        $value = trim(mb_strtoupper($value));
 
         if (strlen($value) === 0) {
             throw new UnexpectedValueException('Invalid move notation.');

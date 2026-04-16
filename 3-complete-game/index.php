@@ -27,7 +27,7 @@ $currentSymbol = match($lastSymbol) {
 $nextSymbol = $currentSymbol;
 
 // Process User Input.
-$move = trim((string) $_SERVER['QUERY_STRING']);
+$move = trim((string) ($_SERVER['QUERY_STRING'] ?? ''));
 
 if (!empty($move) && strlen($move) === 2) {
     $x = match ($move[0]) {

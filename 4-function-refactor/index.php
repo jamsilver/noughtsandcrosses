@@ -105,7 +105,7 @@ $lastSymbol = getLastMoveSymbol($moves);
 $currentSymbol = flipSymbol($lastSymbol ?? 'O');
 $nextSymbol = $currentSymbol;
 
-[$x, $y] = loadXYFromUserInput((string) $_SERVER['QUERY_STRING']);
+[$x, $y] = loadXYFromUserInput((string) ($_SERVER['QUERY_STRING'] ?? ''));
 
 if (isset($x) && isset($y) && validateXYForBoard($board, $x, $y)) {
     $moves[] = [$x, $y, $currentSymbol];

@@ -36,7 +36,7 @@ final class Board1D extends Board
 
     public function hasWinner(): bool
     {
-        return $this->lineIsAWin($this->symbolsWritten);
+        return $this->lineIsAWin($this->gatherLineOfCells(0, 0));
     }
 
     public function __toString(): string

@@ -25,7 +25,6 @@ final class Board2D extends Board
 
     public function forEachCellAround(Coordinate $epicentre, int $radius, bool $includeEpiCentre, callable $callback): self
     {
-        $epicentre = $this->newCoordinate($epicentre);
         for ($x = max(0, $epicentre->getX() - $radius); $x <= min(static::SIZE - 1, $epicentre->getX() + $radius); $x++) {
             for ($y = max(0, $epicentre->getY() - $radius); $y <= min(static::SIZE - 1, $epicentre->getY() + $radius); $y++) {
                 $coordinate = $this->newCoordinate($x, $y);
