@@ -34,6 +34,7 @@ if (!empty($move) && strlen($move) === 2) {
         "A" => 0,
         "B" => 1,
         "C" => 2,
+        default => -1,
     };
 
     $y = (int) $move[1] - 1;
